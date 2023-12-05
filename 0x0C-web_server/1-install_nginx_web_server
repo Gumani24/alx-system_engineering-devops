@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Installs web server
+
+
+apt-get update
+apt-get install -y nginx
+
+# Create a simple HTML page with "Hello World!"
+echo "Hello World!" > /var/www/html/index.html
+
+cat <<EOL > /etc/nginx/sites-available/default
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location = / {
+        return 200 "Hello World!";
+    }
+}
+EOL
+
+service nginx restart
