@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # Makes the debugging short
 
-ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-anabled/default
-service nginx start
-kill "$(pgrep 'nginx' | head -1)"
+echo -e "server {\n    listen 80;\n    server_name _;\n    location / {\n        # Your additional configurations go here\n    }\n}" | sudo tee -a /etc/nginx/nginx.conf >/dev/null
+sudo nginx -t && sudo systemctl reload nginx || echo "nginx is not running"
